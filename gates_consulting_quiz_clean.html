@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gates Consulting · Quiz con música</title>
+  <style>
+    :root{
+      --bg:#0a0f1f;
+      --card:#0e1830;
+      --panel:#0b1429;
+      --text:#e6f1ff;
+      --muted:#9fb3d9;
+      --accent:#00d4ff;
+      --accent2:#25f49a;
+      --border: rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px}
+    .header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+    .brand h1{margin:0;font-size:clamp(20px,3.2vw,28px)}
+    .brand p{margin:2px 0 0 0;color:var(--muted);font-size:14px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 18px 0}
+    button{appearance:none;border:0;border-radius:12px;padding:10px 14px;background:var(--accent);color:#04141a;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,212,255,.25);}
+    button.secondary{background:#12203d;color:#dbeafe;border:1px solid var(--border);box-shadow:none}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:1024px){.grid{grid-template-columns: 440px 1fr}}
+    .ytBox,.formBox{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px}
+    iframe{border:0;width:100%}
+    .footer{color:var(--muted);font-size:12px;margin-top:10px;text-align:center}
+    .brand-logo img{height:60px}
+    .titlebar{margin:6px 0 12px;padding-bottom:8px;}
+    .titlebar .title{font-size:clamp(18px,3vw,22px);font-weight:800;letter-spacing:.3px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand-logo"><img src="logo19.png" alt="Gates Consulting Logo"></div>
+      <div class="brand">
+        <h1>Gates Consulting</h1>
+        <p>Ciberseguridad sin complicaciones</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="titlebar">
+        <div class="title">Aprende y gana con ciberseguridad</div>
+      </div>
+
+      <div class="controls">
+        <button id="btn-sound">🔊 Activar sonido</button>
+        <button id="btn-mute" class="secondary">🔇 Silenciar</button>
+        <button id="btn-replay" class="secondary">⟲ Reiniciar música</button>
+      </div>
+
+      <div class="grid">
+        <div class="ytBox">
+          <div id="player" style="aspect-ratio:16/9;"></div>
+        </div>
+
+        <div class="formBox">
+          <iframe id="gform" src="https://docs.google.com/forms/d/1wJ0JuS53t60vVZuo9PNd8fw4ecU7ammo5ubYcDJRPWY/viewform?embedded=true"
+                  height="1250" loading="lazy">Cargando…</iframe>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">© Gates Consulting — Todos los derechos reservados</p>
+  </div>
+
+  <script>
+    const VIDEO_ID = "i1sUh0bzDps";
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    let player;
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('player', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: VIDEO_ID,
+          controls: 1,
+          modestbranding: 1,
+          rel: 0
+        },
+        events: {
+          onReady: (e) => { try { e.target.mute(); e.target.playVideo(); } catch(_) {} }
+        }
+      });
+    };
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-sound').addEventListener('click', () => { if (player && player.unMute) { player.unMute(); player.playVideo(); } });
+      document.getElementById('btn-mute').addEventListener('click', () => { if (player && player.mute) { player.mute(); } });
+      document.getElementById('btn-replay').addEventListener('click', () => { if (player && player.seekTo) { player.seekTo(0, true); player.playVideo(); } });
+    });
+  </script>
+</body>
+</html>
