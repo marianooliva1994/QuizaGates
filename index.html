@@ -8,33 +8,51 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial;
-      background: url('pattern.png') no-repeat center center fixed;
-      background-size: cover;
       color: #eaf6ff;
+      background: url("pattern.png") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      min-height: 100vh;
     }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 28px }
+    /* Overlay semitransparente sobre el fondo */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(26,43,54,0.8), rgba(76,32,75,0.7));
+      z-index: 0;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 28px; position: relative; z-index: 1; }
     .header { display:flex; align-items:center; gap:16px; margin-bottom:18px; }
-    .brand-logo img { height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18) }
-    .brand h1 { margin:0; font-size: clamp(20px,3.2vw,28px); color: #99ffff; text-shadow: 0 1px 0 rgba(0,0,0,.2) }
-    .brand p { margin:2px 0 0 0; color: #ddd; font-size:14px }
+    .brand-logo img { height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18); }
+    .brand h1 { margin:0; font-size: clamp(20px,3.2vw,28px); color: #99ffff; text-shadow: 0 1px 0 rgba(0,0,0,.4); }
+    .brand p { margin:2px 0 0 0; color: #ddd; font-size:14px; }
     .card {
-      background: rgba(26,43,54,0.85);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: 20px;
       padding: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.3);
       backdrop-filter: blur(6px);
     }
     .title { font-size: clamp(18px,3vw,24px); font-weight: 800; margin: 6px 0 12px; color: #99ffff; }
-    .controls { display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 18px }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 18px; }
     button {
       border: 0; border-radius: 12px; padding: 10px 14px;
       background: #99ffff; color: #022324; font-weight: 800;
       cursor: pointer; box-shadow: 0 6px 20px rgba(153,255,255,0.35);
+      transition: transform .1s;
     }
-    button.secondary { background: #4c204b; color: #fff; }
-    .formBox { background: #fff; border-radius: 14px; padding: 12px; }
-    iframe { border:0; width:100% }
-    .footer { color: #ccc; font-size:12px; margin-top:10px; text-align:center }
+    button:hover { transform: scale(1.05); }
+    button.secondary { background: #4c204b; color: #fff; box-shadow: 0 6px 20px rgba(76,32,75,0.35); }
+    .formBox {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    iframe { border:0; width:100%; }
+    .footer { color: #ccc; font-size:12px; margin-top:10px; text-align:center; }
     #player { display:none !important; width:0 !important; height:0 !important; overflow:hidden !important; }
   </style>
 </head>
@@ -57,6 +75,7 @@
         <button id="btn-replay" class="secondary">⟲ Reiniciar música</button>
       </div>
 
+      <!-- Player oculto -->
       <div id="player" aria-hidden="true"></div>
 
       <div class="formBox">
