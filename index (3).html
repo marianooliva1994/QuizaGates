@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gates Consulting · Aprende y gana con ciberseguridad</title>
+  <style>
+    :root{
+      --brand-dark: #1a2b36;   /* azul petróleo oscuro */
+      --brand-purple: #4c204b; /* púrpura profundo */
+      --brand-cyan: #99ffff;   /* cian brillante */
+      --text: #eaf6ff;
+      --muted: #c0d3df;
+      --ink: #0b1a22;
+      --card: rgba(255,255,255,0.92);
+      --card-border: rgba(10,26,34,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial;
+      color: var(--ink);
+      /* Fondo lúdico con degradado de marca y shapes sutiles */
+      background:
+        radial-gradient(160px 160px at 12% 18%, rgba(153,255,255,0.18), transparent 60%),
+        radial-gradient(220px 220px at 88% 12%, rgba(76,32,75,0.22), transparent 60%),
+        radial-gradient(260px 260px at 20% 90%, rgba(153,255,255,0.12), transparent 60%),
+        linear-gradient(135deg, var(--brand-dark), var(--brand-purple));
+      min-height:100dvh;
+    }
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px}
+    .header{
+      display:flex; align-items:center; gap:16px; margin-bottom:18px;
+    }
+    .brand-logo img{height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18)}
+    .brand h1{margin:0; font-size: clamp(20px,3.2vw,28px); color: var(--brand-cyan); text-shadow: 0 1px 0 rgba(0,0,0,.2)}
+    .brand p{margin:2px 0 0 0; color: var(--muted); font-size:14px}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+      backdrop-filter: blur(6px);
+    }
+    .title{
+      font-size: clamp(18px,3vw,24px);
+      font-weight: 800;
+      letter-spacing: .2px;
+      margin: 6px 0 12px;
+      color: #11232c;
+    }
+    .controls{display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 18px}
+    button{
+      appearance: none; border: 0; border-radius: 12px; padding: 10px 14px;
+      background: var(--brand-cyan); color: #022324; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(153,255,255,0.35); transition: transform .1s, filter .2s;
+    }
+    button:hover{ transform: translateY(-1px) }
+    button.secondary{
+      background: var(--brand-purple); color: #f6eaff;
+      box-shadow: 0 6px 20px rgba(76,32,75,0.35);
+    }
+    .formBox{
+      background: #fff; border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 12px;
+    }
+    iframe{border:0; width:100%}
+    .footer{ color: #e4f9ff; font-size:12px; margin-top:10px; text-align:center; opacity:.9}
+    /* Ocultar player (música en segundo plano) */
+    #player{ display:none !important; width:0 !important; height:0 !important; overflow:hidden !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand-logo"><img src="logo19.png" alt="Gates Consulting Logo"></div>
+      <div class="brand">
+        <h1>Gates Consulting</h1>
+        <p>Ciberseguridad sin complicaciones</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">Aprende y gana con ciberseguridad</div>
+
+      <div class="controls">
+        <button id="btn-sound">🔊 Activar sonido</button>
+        <button id="btn-mute" class="secondary">🔇 Silenciar</button>
+        <button id="btn-replay" class="secondary">⟲ Reiniciar música</button>
+      </div>
+
+      <!-- Player oculto -->
+      <div id="player" aria-hidden="true"></div>
+
+      <div class="formBox">
+        <iframe id="gform" src="https://docs.google.com/forms/d/1wJ0JuS53t60vVZuo9PNd8fw4ecU7ammo5ubYcDJRPWY/viewform?embedded=true"
+                height="1250" loading="lazy">Cargando…</iframe>
+      </div>
+    </div>
+
+    <p class="footer">© Gates Consulting — Todos los derechos reservados</p>
+  </div>
+
+  <script>
+    const VIDEO_ID = "i1sUh0bzDps";
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    let player;
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('player', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: VIDEO_ID,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0
+        },
+        events: {
+          onReady: (e) => { try { e.target.mute(); e.target.playVideo(); } catch(_) {} }
+        }
+      });
+    };
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-sound').addEventListener('click', () => { if (player && player.unMute) { player.unMute(); player.playVideo(); } });
+      document.getElementById('btn-mute').addEventListener('click', () => { if (player && player.mute) { player.mute(); } });
+      document.getElementById('btn-replay').addEventListener('click', () => { if (player && player.seekTo) { player.seekTo(0, true); player.playVideo(); } });
+    });
+  </script>
+</body>
+</html>
