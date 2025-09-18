@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gates Consulting · Aprende y gana con ciberseguridad</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial;
+      background: url('pattern.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #eaf6ff;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 28px }
+    .header { display:flex; align-items:center; gap:16px; margin-bottom:18px; }
+    .brand-logo img { height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18) }
+    .brand h1 { margin:0; font-size: clamp(20px,3.2vw,28px); color: #99ffff; text-shadow: 0 1px 0 rgba(0,0,0,.2) }
+    .brand p { margin:2px 0 0 0; color: #ddd; font-size:14px }
+    .card {
+      background: rgba(26,43,54,0.85);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
+    }
+    .title { font-size: clamp(18px,3vw,24px); font-weight: 800; margin: 6px 0 12px; color: #99ffff; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 18px }
+    button {
+      border: 0; border-radius: 12px; padding: 10px 14px;
+      background: #99ffff; color: #022324; font-weight: 800;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(153,255,255,0.35);
+    }
+    button.secondary { background: #4c204b; color: #fff; }
+    .formBox { background: #fff; border-radius: 14px; padding: 12px; }
+    iframe { border:0; width:100% }
+    .footer { color: #ccc; font-size:12px; margin-top:10px; text-align:center }
+    #player { display:none !important; width:0 !important; height:0 !important; overflow:hidden !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand-logo"><img src="logo19.png" alt="Gates Consulting Logo"></div>
+      <div class="brand">
+        <h1>Gates Consulting</h1>
+        <p>Ciberseguridad sin complicaciones</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">Aprende y gana con ciberseguridad</div>
+
+      <div class="controls">
+        <button id="btn-sound">🔊 Activar sonido</button>
+        <button id="btn-mute" class="secondary">🔇 Silenciar</button>
+        <button id="btn-replay" class="secondary">⟲ Reiniciar música</button>
+      </div>
+
+      <div id="player" aria-hidden="true"></div>
+
+      <div class="formBox">
+        <iframe id="gform" src="https://docs.google.com/forms/d/1wJ0JuS53t60vVZuo9PNd8fw4ecU7ammo5ubYcDJRPWY/viewform?embedded=true"
+                height="1250" loading="lazy">Cargando…</iframe>
+      </div>
+    </div>
+
+    <p class="footer">© Gates Consulting — Todos los derechos reservados</p>
+  </div>
+
+  <script>
+    const VIDEO_ID = "i1sUh0bzDps";
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    let player;
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('player', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: VIDEO_ID,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0
+        },
+        events: {
+          onReady: (e) => { try { e.target.mute(); e.target.playVideo(); } catch(_) {} }
+        }
+      });
+    };
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-sound').addEventListener('click', () => { if (player && player.unMute) { player.unMute(); player.playVideo(); } });
+      document.getElementById('btn-mute').addEventListener('click', () => { if (player && player.mute) { player.mute(); } });
+      document.getElementById('btn-replay').addEventListener('click', () => { if (player && player.seekTo) { player.seekTo(0, true); player.playVideo(); } });
+    });
+  </script>
+</body>
+</html>
