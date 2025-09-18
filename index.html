@@ -5,55 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gates Consulting · Aprende y gana con ciberseguridad</title>
   <style>
-    body {
-      margin: 0;
+    :root{
+      --c-cyan: #99ffff;
+      --c-purple: #4c204b;
+      --c-ink: #0b1a22;
+    }
+
+    /* ===== Fondo con patrón + overlays (uno fijo + uno animado) ===== */
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial;
-      color: #eaf6ff;
-      background: url("pattern.png") no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      min-height: 100vh;
+      color:#eaf6ff;
+      background: url("pattern.png") center/cover fixed no-repeat;
+      min-height:100vh;
+      position:relative;
+      overflow-x:hidden;
     }
-    /* Overlay semitransparente sobre el fondo */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(26,43,54,0.8), rgba(76,32,75,0.7));
-      z-index: 0;
+    /* Overlay fijo (oscurece levemente para mejorar contraste) */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background: linear-gradient(135deg, rgba(26,43,54,0.75), rgba(76,32,75,0.60));
+      pointer-events:none;
+      z-index:0;
     }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 28px; position: relative; z-index: 1; }
-    .header { display:flex; align-items:center; gap:16px; margin-bottom:18px; }
-    .brand-logo img { height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18); }
-    .brand h1 { margin:0; font-size: clamp(20px,3.2vw,28px); color: #99ffff; text-shadow: 0 1px 0 rgba(0,0,0,.4); }
-    .brand p { margin:2px 0 0 0; color: #ddd; font-size:14px; }
-    .card {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.15);
+    /* Overlay ANIMADO (brillo cian-púrpura que se desplaza suavemente) */
+    body::after{
+      content:"";
+      position:fixed; inset:-10%;
+      background:
+        radial-gradient(50% 60% at 20% 30%, rgba(153,255,255,.12), transparent 60%),
+        radial-gradient(40% 50% at 80% 70%, rgba(76,32,75,.18), transparent 60%),
+        conic-gradient(from 0deg, rgba(153,255,255,.06), rgba(76,32,75,.06), rgba(153,255,255,.06));
+      filter: blur(18px);
+      animation: drift 38s linear infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+    @keyframes drift{
+      0%   { transform: translate3d(-2%, -1%, 0) rotate(0deg);   opacity:.85; }
+      50%  { transform: translate3d( 2%,  1%, 0) rotate(180deg); opacity:.95; }
+      100% { transform: translate3d(-2%, -1%, 0) rotate(360deg); opacity:.85; }
+    }
+
+    /* ===== Layout ===== */
+    .wrap{max-width:980px; margin:0 auto; padding:28px; position:relative; z-index:1;}
+    .header{display:flex; align-items:center; gap:16px; margin-bottom:18px;}
+    .brand-logo img{height:60px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.18)}
+    .brand h1{margin:0; font-size:clamp(20px,3.2vw,28px); color:var(--c-cyan); text-shadow:0 1px 0 rgba(0,0,0,.45)}
+    .brand p{margin:2px 0 0 0; color:#dbe7ee; font-size:14px}
+
+    .card{
+      /* Transparente para que se vea el patrón; ligero borde/vidrio para legibilidad */
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 20px;
       padding: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
       backdrop-filter: blur(6px);
     }
-    .title { font-size: clamp(18px,3vw,24px); font-weight: 800; margin: 6px 0 12px; color: #99ffff; }
-    .controls { display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 18px; }
-    button {
-      border: 0; border-radius: 12px; padding: 10px 14px;
-      background: #99ffff; color: #022324; font-weight: 800;
-      cursor: pointer; box-shadow: 0 6px 20px rgba(153,255,255,0.35);
-      transition: transform .1s;
+
+    .title{
+      font-size:clamp(18px,3vw,24px);
+      font-weight:800; letter-spacing:.2px; margin:6px 0 12px;
+      color: var(--c-cyan);
     }
-    button:hover { transform: scale(1.05); }
-    button.secondary { background: #4c204b; color: #fff; box-shadow: 0 6px 20px rgba(76,32,75,0.35); }
-    .formBox {
-      background: #fff;
-      border-radius: 14px;
-      padding: 12px;
-      border: 1px solid #e0e0e0;
+
+    .controls{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 18px}
+    button{
+      border:0; border-radius:12px; padding:10px 14px;
+      background:var(--c-cyan); color:#022324; font-weight:800; cursor:pointer;
+      box-shadow:0 6px 20px rgba(153,255,255,0.35); transition:transform .1s, filter .2s;
     }
-    iframe { border:0; width:100%; }
-    .footer { color: #ccc; font-size:12px; margin-top:10px; text-align:center; }
-    #player { display:none !important; width:0 !important; height:0 !important; overflow:hidden !important; }
+    button:hover{ transform: translateY(-1px) }
+    button.secondary{
+      background:var(--c-purple); color:#fff;
+      box-shadow:0 6px 20px rgba(76,32,75,0.35);
+    }
+
+    /* IMPORTANTE: contenedor del form SIN fondo blanco para que solo resalten los bloques del Google Form */
+    .formBox{
+      background: transparent;       /* <- sin blanco */
+      border: 0;                     /* sin borde para que no “marque caja” */
+      border-radius: 14px; padding: 0;
+    }
+
+    iframe{border:0; width:100%}
+    .footer{color:#cfe9ef; font-size:12px; margin-top:10px; text-align:center}
+
+    /* Ocultamos el reproductor: la música suena en segundo plano */
+    #player{ display:none !important; width:0 !important; height:0 !important; overflow:hidden !important; }
   </style>
 </head>
 <body>
@@ -78,6 +119,7 @@
       <!-- Player oculto -->
       <div id="player" aria-hidden="true"></div>
 
+      <!-- Sin fondo aquí: solo se verán los “cuadrados” blancos del Google Form dentro del iframe -->
       <div class="formBox">
         <iframe id="gform" src="https://docs.google.com/forms/d/1wJ0JuS53t60vVZuo9PNd8fw4ecU7ammo5ubYcDJRPWY/viewform?embedded=true"
                 height="1250" loading="lazy">Cargando…</iframe>
